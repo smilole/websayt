@@ -2,23 +2,27 @@
 <html>
   <head>
     <title>Поиск пути A*</title>
-    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
   </head>
   <body>
 
-    <h1>Поиск пути A*</h1>
+    <div class = "menuButtons">
+      <button class="button button1" onclick="goToAStar()"> A-Star </button>
+      <button class="button button1" onclick = "goToClusterization()"> Кластеризация </button>
+      <button class="button button1"> Тык </button>
+      <button class="button button1"> Тык </button>
+      <button class="button button1"> Тык </button>
+  </div>
 
-    <p>Введите размер карты (n): <input type="number" id="size" value="10"><button onclick="generateMap()">Сгенерировать новую карту</button></p>
+    <p>Введите размер карты (n): <input type="number" id="size" min="1" value="10"><button onclick="generateMap()">Сгенерировать новую карту</button></p>
 
-    <p>Выберите начальную точку, затем конечную ,после чего расставьте непроходимые клетки</p>
-
-    <p>Выберите стартовую и конечную клетки:</p>
+    <p>Выберите начальную точку, затем конечную ,после чего расставьте непроходимые клетки:</p>
 
     <table id="table"></table>
 
     <p><button onclick="findPath()">Найти путь</button></p>
 
-    <script type="text/javascript" src="scripts/A-starScript.js"></script>
-    
   </body>
 </html>
+    <script type="text/javascript" src="scripts/A-starScript.js"></script>
+    <script type="text/javascript" src="scripts/menu.js"></script>

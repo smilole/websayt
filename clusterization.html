@@ -5,6 +5,13 @@
     <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
   </head>
   <body>
+    <div class = "menuButtons">
+      <button class="button button1" onclick="goToAStar()"> A-Star </button>
+      <button class="button button1" onclick = "goToClusterization()"> Кластеризация </button>
+      <button class="button button1"> Тык </button>
+      <button class="button button1"> Тык </button>
+      <button class="button button1"> Тык </button>
+  </div>
     <h1>Кластеризация</h1>
 
     <canvas id="canvas" width="400" height="400"></canvas>
@@ -15,6 +22,7 @@
     <label for="minPts">Минимум точек в кластере:</label>
     <input type="range" id="minPts" name="minPts" min="1" max="20" value="3" />
     <br />
-    <button onclick="colorizeClusters(points, document.getElementById('eps').value, document.getElementById('minPts').value)">Clusterize</button>
+    <button onclick="colorizeClusters(points, document.getElementById('eps').value, document.getElementById('minPts').value)">Кластеризировать</button>
   </body>
   <script type="text/javascript" src="scripts/clusterizationScript.js"></script>
+  <script type="text/javascript" src="scripts/menu.js"></script>
