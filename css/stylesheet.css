@@ -24,14 +24,24 @@ table{
     background-color: black;
     opacity: 0.5;
 }
+/*Оформление старта*/
 .start{
     background-color: green;
     opacity: 0.5;
 }
+/*Оформление финиша*/
 .end{
     background-color: rgb(161, 6, 6);
     opacity: 0.5;
 }
+
+/*Оформление холста*/
+canvas {
+    border: 1px solid #ccc;
+    cursor: crosshair;
+    background-color: white;
+}
+
 body {
     background: radial-gradient(circle at center, #ad5da7, #e4e5e6);
 }
