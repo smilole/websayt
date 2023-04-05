@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Поиск пути A*</title>
+    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css">
+  </head>
+  <body>
+
+    <h1>Поиск пути A*</h1>
+
+    <p>Введите размер карты (n): <input type="number" id="size" value="10"><button onclick="generateMap()">Сгенерировать новую карту</button></p>
+
+    <p>Выберите начальную точку, затем конечную ,после чего расставьте непроходимые клетки</p>
+
+    <p>Выберите стартовую и конечную клетки:</p>
+
+    <table id="table"></table>
+
+    <p><button onclick="findPath()">Найти путь</button></p>
+
+    <script type="text/javascript" src="scripts/A-starScript.js"></script>
+    
+  </body>
+</html>
