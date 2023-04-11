@@ -17,7 +17,7 @@ function generateMap() {
           cell.dataset.y = i;
           cell.addEventListener("click", function () {
             // При клике на ячейку устанавливаем ее как начальную или конечную
-            if (start == null && !impassables.has(this)) {
+            if (start == null && end == null &&!impassables.has(this)) {
               start = this;
               this.classList.add("start");
             } else if (end == null && this != start && !impassables.has(this)) {
