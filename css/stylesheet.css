@@ -73,6 +73,11 @@ table{
     opacity: 0.5;
 }
 
+/*Оформление поиска*/
+.searching{
+    background-color: aquamarine; 
+}
+
 /*Оформление холста*/
 canvas {
     border: 1px solid #ccc;

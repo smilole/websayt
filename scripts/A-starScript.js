@@ -6,6 +6,10 @@ var impassables = new Set();
 
 generateMap();
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function generateMap() {
     n = document.getElementById("size").value;
     var newTable = document.createElement("table");
@@ -35,6 +39,7 @@ function generateMap() {
             } else if (start!=null && end!=null && this!=start && this!=end){
                 if (!impassables.has(this)) {
                     impassables.add(this);
+                    this.classList.remove("searching");
                     this.classList.add("impassable");
                 } else if (impassables.has(this)){
                   impassables.delete(this);
@@ -59,7 +64,7 @@ function generateMap() {
     path = null;
 }
 
-function findPath() {
+async function findPath() {
 
     // Удаляем старый путь
 
@@ -67,6 +72,7 @@ function findPath() {
         for (var j = 0; j < n; j++) {
             var cell = table.rows[i].cells[j];
             cell.classList.remove("path");
+            cell.classList.remove("searching");
         }
     }
 
@@ -103,6 +109,11 @@ function findPath() {
             );
             if (!openSet.has(neighbor)) {
               openSet.add(neighbor);
+              if(neighbor!=end){
+                var ms = document.getElementById("animation").value;
+                neighbor.classList.add("searching");
+                await sleep(ms);
+              }
             }
           }
         }
@@ -153,12 +164,15 @@ function heuristic(a, b) {
     return Math.abs(x1 - x2) + Math.abs(y1 - y2);
 }
 
-function showPath(cameFrom, current) {
+async function showPath(cameFrom, current) {
     // Отображаем найденный путь
     while (cameFrom.has(current)) {
       current = cameFrom.get(current);
       if (current != start) {
+        var ms = document.getElementById("animation").value;
+        current.classList.remove("searching");
         current.classList.add("path");
+        await sleep(ms);
       }
     }
 }
