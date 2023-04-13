@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Главная страница</title>
+        <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
+    </head>
+    <body>
+        <div class = "menuButtons">
+            <button class="button button1" onclick = "goToAStar()"> A-Star </button>
+            <button class="button button1" onclick = "goToClusterization()"> Кластеризация </button>
+            <button class="button button1" onclick = "goToGenetics()"> Генетика </button>
+            <button class="button button1" onclick = "otherButtons()"> Тык </button>
+            <button class="button button1" onclick = "otherButtons()"> Тык </button>
+        </div>
+        <div class="main">
+			<canvas id = "canvasgen" style="display: block; border: 2px solid black"></canvas>
+		</div>
+ 
+		<div class="settings">
+			<label>Число поколений</label> <input type = "number" value = "500000" id = "maxGen" min = "10000" max = "1000000"/>
+			<button id="Gen" onclick="genAlg(citiesCord)"> Запустить </button>
+			<button id="clear" onclick="clearCanvas(); citiesCord = [];"> Очистить </button>
+		</div>
+
+    </body>
+</html>
+<script>
+    let canvas = document.getElementById("canvasgen");
+		let ctx = canvas.getContext("2d");
+		canvas.width = 1200;
+		canvas.height = 800;
+			ctx.lineWidth = 7;
+			//
+			let citiesCord = [];
+ 
+			canvas.addEventListener("mousedown", function addCity(pos){
+				var rect = canvas.getBoundingClientRect();
+                var x = event.clientX - rect.left;
+                var y = event.clientY - rect.top;
+				for (let i = 0; i < citiesCord.length; i++){
+					if (Math.sqrt(
+							Math.pow(citiesCord[i][0] - x, 2) + Math.pow(citiesCord[i][1] - y, 2)
+					) <= 60){
+						return;
+					}
+				}
+				ctx.beginPath();
+				ctx.arc(x ,y , 15, 0, 2 * Math.PI);
+				ctx.fill();
+				citiesCord.push([x, y]);
+			});
+ 
+			function clearCanvas(){
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+			}
+			function restore(cities){
+				for (let i = 0; i < cities.length; i++) {
+					ctx.beginPath();
+					ctx.arc(citiesCord[i][0], citiesCord[i][1], 15, 0, 2 * Math.PI);
+					ctx.fill();
+				}
+			}
+ 
+		</script>
+<script type="text/javascript" src="scripts/genetica.js"></script>
+<script type="text/javascript" src="scripts/menu.js"></script>

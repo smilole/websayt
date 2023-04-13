@@ -7,6 +7,9 @@ function goToAStar(){
 function goToClusterization(){
     window.location.href = "clusterization.html";
 }
+function goToGenetics(){
+    window.location.href = "genetics.html";
+}
 function otherButtons(){
     window.location.href = "mainpage.html";
 }
