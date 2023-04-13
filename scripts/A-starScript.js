@@ -176,3 +176,109 @@ async function showPath(cameFrom, current) {
       }
     }
 }
+function makeLab(){
+  // Создаем двумерный массив для представления карты, устанавливая все ячейки как стены.
+let map = [];
+for (let w = 0; w < width; w++) {
+  map[w] = [];
+  for (let h = 0; h < height; h++) {
+    map[w][h] = makeWall();
+  }
+}
+
+// Выбираем случайную ячейку с нечетными x и y координатами и очищаем ее.
+let x = getRandomInt(0, width / 2) * 2 + 1;
+let y = getRandomInt(0, height / 2) * 2 + 1;
+map[x][y] = makeClear();
+
+// Создаем массив и добавляем в него валидные ячейки, которые находятся на расстоянии двух ортогональных клеток от только что очищенной клетки.
+let toCheck = [];
+if (y - 2 >= 0) {
+  toCheck.push({ x: x, y: y - 2 });
+}
+if (y + 2 < height) {
+  toCheck.push({ x: x, y: y + 2 });
+}
+if (x - 2 >= 0) {
+  toCheck.push({ x: x - 2, y: y });
+}
+if (x + 2 < width) {
+  toCheck.push({ x: x + 2, y: y });
+}
+
+// Пока есть ячейки в массиве toCheck, выбираем случайную ячейку, очищаем ее и удаляем из массива toCheck.
+while (toCheck.length > 0) {
+  let index = getRandomInt(0, toCheck.length);
+  let cell = toCheck[index];
+  x = cell.x;
+  y = cell.y;
+  map[x][y] = makeClear();
+  toCheck.splice(index, 1);
+
+  // Очищенная ячейка должна быть соединена с другой свободной ячейкой.
+  // Ищем свободную ячейку на расстоянии двух ортогональных клеток от только что очищенной ячейки.
+  let directions = ['NORTH', 'SOUTH', 'EAST', 'WEST'];
+  while (directions.length > 0) {
+    let dirIndex = getRandomInt(0, directions.length);
+    let direction = directions[dirIndex];
+    switch (direction) {
+      case 'NORTH':
+        if (y - 2 >= 0 && map[x][y - 2] === makeClear()) {
+          map[x][y - 1] = makeClear();
+          directions = [];
+        }
+        break;
+      case 'SOUTH':
+        if (y + 2 < height && map[x][y + 2] === makeClear()) {
+          map[x][y + 1] = makeClear();
+          directions = [];
+        }
+        break;
+      case 'EAST':
+        if (x - 2 >= 0 && map[x - 2][y] === makeClear()) {
+          map[x - 1][y] = makeClear();
+          directions = [];
+        }
+        break;
+      case 'WEST':
+        if (x + 2 < width && map[x + 2][y] === makeClear()) {
+          map[x + 1][y] = makeClear();
+          directions = [];
+        }
+        break;
+    }
+    directions.splice(dirIndex, 1);
+  }
+
+  // Добавляем в массив toCheck все валидные ячейки, находящиеся на расстоянии двух ортогональных клеток от только что очищенной ячейки и которые еще не добавлены в массив toCheck.
+  if (y - 2 >= 0 && map[x][y - 2] === makeWall()) {
+    toCheck.push({ x: x, y: y - 2 });
+  }
+  if (y + 2 < height && map[x][y + 2] === makeWall()) {
+    toCheck.push({ x: x, y: y + 2 });
+  }
+  if (x - 2 >= 0 && map[x - 2][y] === makeWall()) {
+    toCheck.push({ x: x - 2, y: y });
+  }
+  if (x + 2 < width && map[x + 2][y] === makeWall()) {
+    toCheck.push({ x: x + 2, y: y });
+  }
+}
+
+// Функция для создания стены
+function makeWall() {
+  return 1; // предполагаем, что 1 - это представление стены на карте
+}
+
+// Функция для создания прохода
+function makeClear() {
+  return 0; // предполагаем, что 0 - это представление прохода на карте
+}
+
+// Функция для генерации случайного целого числа в заданном диапазоне
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+
+}
