@@ -14,9 +14,9 @@
       <button class="button button1" onclick = "otherButtons()"> Тык </button>
   </div>
 
-    <p>Введите размер карты (n): <input type="number" id="size" min="1" value="10"><button onclick="generateMap()">Сгенерировать новую карту</button></p>
+    <p>Введите размер карты (n): <input type="number" id="size" min="1" value="10"><button id = "genButton" onclick="generateMap()">Сгенерировать новую карту</button></p>
 
-    <p> <button onclick = "fillMaze()">Сгенерировать лабиринт</button></p>
+    <p> <button id = "primmButton" onclick = "createPrimmLabyrinth()">Сгенерировать лабиринт</button></p>
 
     <p>Скорость анимации(ms):<input type="range" id="animation" name="Скорость анимации(ms)" min="1" max="100" value="50" /></p>
 
@@ -24,7 +24,7 @@
 
     <table id="table"></table>
 
-    <p><button onclick="findPath()">Найти путь</button></p>
+    <p><button id = "pathButton" onclick="findPath()">Найти путь</button></p>
 
   </body>
 </html>
