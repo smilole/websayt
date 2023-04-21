@@ -70,12 +70,12 @@ var canvas = document.getElementById("canvas");
 }
  
   function getRandomColor() {
-  // Генерируем случайные значения для каждого цветового канала (R, G, B)
+  // Генерируем случайные значения для каждого цветового канала
   let r = Math.floor(Math.random() * 256);
   let g = Math.floor(Math.random() * 256);
   let b = Math.floor(Math.random() * 256);
  
-  // Комбинируем значения каналов в один цветовой код в формате HEX
+  // Задаем код цвета при помощи случайных rgb
   let colorCode = "#" + r.toString(16) + g.toString(16) + b.toString(16);
  
   return colorCode;

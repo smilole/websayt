@@ -4,6 +4,7 @@ var start = null;
 var end = null;
 var impassables = new Set();
 var map;
+var flagForTableButtons = true;
 generateMap();
 
 function sleep(ms) {
@@ -11,12 +12,14 @@ function sleep(ms) {
 }
 
 function disableButtons(){
+  flagForTableButtons = false;
   document.getElementById("pathButton").disabled = true;
   document.getElementById("primmButton").disabled = true;
   document.getElementById("genButton").disabled = true;
 }
 
 function enableButtons(){
+  flagForTableButtons = true;
   document.getElementById("pathButton").disabled = false;
   document.getElementById("primmButton").disabled = false;
   document.getElementById("genButton").disabled = false;
@@ -42,30 +45,33 @@ function generateMap() {
           cell.dataset.x = j;
           cell.dataset.y = i;
           cell.addEventListener("click", function () {
-            // При клике на ячейку устанавливаем ее как начальную или конечную
-            if (start == null && this != end &&!impassables.has(this)) {
-              start = this;
-              this.classList.add("start");
-            } else if (end == null && this != start && !impassables.has(this)) {
-              end = this;
-              this.classList.add("end");
-            }else if(this==start || this==end){
-              if(this==start){
-                start = null;
-                this.classList.remove("start");
-              }
-              if(this==end){
-                end = null;
-                this.classList.remove("end");
-              }
-            } else{
-                if (!impassables.has(this) && this!=start && this!=end) {
-                    impassables.add(this);
-                    this.classList.remove("searching");
-                    this.classList.add("impassable");
-                } else if (impassables.has(this)){
-                  impassables.delete(this);
-                  this.classList.remove("impassable");
+            if(flagForTableButtons){
+              // При клике на ячейку устанавливаем ее как начальную или конечную
+              if (start == null && this != end &&!impassables.has(this)) {
+                start = this;
+                this.classList.add("start");
+              }else if (end == null && this != start && !impassables.has(this)) {
+                end = this;
+                this.classList.add("end");
+              // При повторном нажатии на начальную или конечную ячейку - освобождаем её
+              }else if(this==start || this==end){
+                if(this==start){
+                  start = null;
+                  this.classList.remove("start");
+                }
+                if(this==end){
+                  end = null;
+                  this.classList.remove("end");
+                }
+              // При нажатии на ячейку устанавливаем её как непроходимую
+              }else if (!impassables.has(this) && this!=start && this!=end) {
+               impassables.add(this);
+               this.classList.remove("searching");
+                this.classList.add("impassable");
+              // При повторном нажатии на непроходимую клетку - освобождаем её
+              }else if (impassables.has(this)){
+                impassables.delete(this);
+                this.classList.remove("impassable");
               }
             }
           });
@@ -77,7 +83,7 @@ function generateMap() {
       // Заменяем старую таблицу новой
     table.parentNode.replaceChild(newTable, table);
 
-    // Сбрасываем переменные и состояние
+    // Сбрасываем переменные
     table = newTable;
     start = null;
     end = null;
@@ -94,7 +100,6 @@ async function findPath() {
   disableButtons();
 
     // Удаляем старый путь
-
     for (var i = 0; i < n; i++) {
         for (var j = 0; j < n; j++) {
             var cell = table.rows[i].cells[j];
@@ -104,7 +109,6 @@ async function findPath() {
     }
 
     // Ищем путь 
-
     if (start == null || end == null) {
       alert("Укажите стартовую и конечную клетки!");
       enableButtons();
@@ -125,16 +129,10 @@ async function findPath() {
             continue;
           }
           var tentativeGScore = gScore.get(current) + 1;
-          if (
-            !gScore.has(neighbor) ||
-            tentativeGScore < gScore.get(neighbor)
-          ) {
+          if (!gScore.has(neighbor) || tentativeGScore < gScore.get(neighbor)) {
             cameFrom.set(neighbor, current);
             gScore.set(neighbor, tentativeGScore);
-            fScore.set(
-              neighbor,
-              tentativeGScore + heuristic(neighbor, end)
-            );
+            fScore.set(neighbor, tentativeGScore + heuristic(neighbor, end));
             if (!openSet.has(neighbor)) {
               openSet.add(neighbor);
               if(neighbor!=end){
@@ -157,7 +155,7 @@ function getLowestFScore(set, scores) {
     var lowestScore = Infinity;
     for (var elem of set) {
       if (scores.get(elem) < lowestScore) {
-        lowest =         elem;
+        lowest = elem;
         lowestScore = scores.get(elem);
       }
     }
@@ -238,7 +236,7 @@ function makeWall(x, y) {
   table.rows[x].cells[y].classList.add("impassable");
   impassables.add(table.rows[x].cells[y]);
 }
-// Проверка на tmpty поле
+// Проверка на пустое поле
 function isEmpty(x, y){
   return map[x][y] === 0 ? true : false;
 }
@@ -247,24 +245,20 @@ function isEmpty(x, y){
 async function createPrimmLabyrinth() {
 
   disableButtons();
-
-  let size = document.getElementById("size").value;
-
+  
   // Создание массива лабиринта
-  let map = new Array(size);
-  for(let i = 0; i < size; i++) {
-      map[i] = new Array(size);
+  let map = new Array(n);
+  for(let i = 0; i < n; i++) {
+      map[i] = new Array(n);
   }
 
-
-
   let topRow = 0;
-  let bottomRow = size - 1;
+  let bottomRow = n - 1;
   let topCell = 0;
-  let bottomCell = size - 1;
+  let bottomCell = n - 1;
 
   while(topRow<=bottomRow){
-    while(topCell<size && bottomCell>=0){
+    while(topCell<n && bottomCell>=0){
       makeWall(topRow,topCell);
       makeWall(bottomRow,bottomCell);
 
@@ -272,21 +266,21 @@ async function createPrimmLabyrinth() {
       bottomCell--;
     }
     topCell = 0;
-    bottomCell = size - 1;
+    bottomCell = n - 1;
     topRow++;
     bottomRow--;
   }
 
 
   // Рандомная ячейка начала генерации лабиринта
-  let cell = new Coords(Math.floor((Math.random() * (size / 2))) * 2, Math.floor((Math.random() * (size / 2))) * 2); 
+  let cell = new Coords(Math.floor((Math.random() * (n / 2))) * 2, Math.floor((Math.random() * (n / 2))) * 2); 
   makeEmpty(cell.x, cell.y);
 
-  // массив использованных ячеек
-  let isUsed = new Array(size);
-  for(let i = 0; i < size; i++){
-      isUsed[i] = new Array(size);
-      for(let j = 0; j < size; j++) {
+  // Массив использованных ячеек
+  let isUsed = new Array(n);
+  for(let i = 0; i < n; i++){
+      isUsed[i] = new Array(n);
+      for(let j = 0; j < n; j++) {
           isUsed[i][j] = false;
       }
   }
@@ -298,7 +292,7 @@ async function createPrimmLabyrinth() {
       toCheck.push(new Coords(cell.x, cell.y - 2));
       isUsed[cell.x][cell.y - 2] = true;
   }
-  if (cell.y + 2 < size) {
+  if (cell.y + 2 < n) {
       toCheck.push(new Coords(cell.x, cell.y + 2));
       isUsed[cell.x][cell.y + 2] = true;
   }
@@ -306,7 +300,7 @@ async function createPrimmLabyrinth() {
       toCheck.push(new Coords(cell.x - 2, cell.y));
       isUsed[cell.x - 2][cell.y] = true;
   }
-  if (cell.x + 2 < size) {
+  if (cell.x + 2 < n) {
       toCheck.push(new Coords(cell.x + 2, cell.y));
       isUsed[cell.x + 2][cell.y] = true;
   }
@@ -321,41 +315,41 @@ async function createPrimmLabyrinth() {
       let y = toCheck[index].y;
       makeEmpty(x, y);
 
-      if(x == size - 2) {
+      if(x == n - 2) {
         makeEmpty(x + 1, y);
       }
-      if(y == size - 2) {
+      if(y == n - 2) {
         makeEmpty(x, y + 1);
       }
       toCheck.splice(index, 1);
 
 
-      // Убарть стену в ячейке находящейся между рандомной ячейкой и ее родителем.
-      let directions = ["NORTH", "SOUTH", "EAST", "WEST"];
+      // Убрать стену в ячейке находящейся между рандомной ячейкой и ее родителем.
+      let directions = ["up", "down", "right", "left"];
       let flag = false;
       while (directions.length > 0 && !flag) {
           let dir_index = Math.floor(Math.random() * directions.length);
           switch (directions[dir_index]) {
-          case "NORTH":
+          case "up":
               if ( y - 2 >= 0 && isEmpty(x, y - 2)) {
                   makeEmpty(x, y - 1);
                   flag = true;
               }
               break;
-          case "SOUTH":
-              if (y + 2 < size && isEmpty(x, y + 2)) {
+          case "down":
+              if (y + 2 < n && isEmpty(x, y + 2)) {
                   makeEmpty(x, y + 1);
                   flag = true;
               }
               break;
-          case "EAST":
+          case "right":
               if (x - 2 >= 0 && isEmpty(x - 2, y)) {
                   makeEmpty(x - 1, y);
                   flag = true;
               }
               break;
-          case "WEST":
-              if (x + 2 < size && isEmpty(x + 2, y)) {
+          case "left":
+              if (x + 2 < n && isEmpty(x + 2, y)) {
                   makeEmpty(x + 1, y);
                   flag = true;
               }
@@ -372,7 +366,7 @@ async function createPrimmLabyrinth() {
           toCheck.push(new Coords(x, y - 2));
           isUsed[x][y - 2] = true;
       }
-      if (y + 2 < size && !isEmpty(x, y + 2) && !isUsed[x][y + 2]) {
+      if (y + 2 < n && !isEmpty(x, y + 2) && !isUsed[x][y + 2]) {
           toCheck.push(new Coords(x, y + 2));
           isUsed[x][y + 2] = true;
       }
@@ -380,25 +374,25 @@ async function createPrimmLabyrinth() {
           toCheck.push(new Coords(x - 2, y));
           isUsed[x - 2][y] = true;
       }
-      if (x + 2 < size && !isEmpty(x + 2, y) && !isUsed[x + 2][y]) {
+      if (x + 2 < n && !isEmpty(x + 2, y) && !isUsed[x + 2][y]) {
           toCheck.push(new Coords(x + 2, y));
           isUsed[x + 2][y] = true;
       }
 
-      if(count >= Math.floor(size / 10)){
+      if(count >= Math.floor(n / 10)){
           await sleep(document.getElementById("animation").value);
           count = 0;
       }
       count++;
   }
-  if(size % 2 == 0){
-  makeEmpty(size - 1, size - 1)
+  if(n % 2 == 0){
+  makeEmpty(n - 1, n - 1)
   if(Math.floor((Math.random() * (2))) == 1) {
-    makeEmpty(size - 2, size - 1)
-    makeWall(size - 1, size - 2)
+    makeEmpty(n - 2, n - 1)
+    makeWall(n - 1, n - 2)
   } else {
-    makeEmpty(size - 1, size - 2)
-    makeWall(size - 2, size - 1)
+    makeEmpty(n - 1, n - 2)
+    makeWall(n - 2, n - 1)
   }
 }
 
@@ -407,8 +401,8 @@ async function createPrimmLabyrinth() {
   // Поставить дефолтное значение для старта и финиша.
   table.rows[0].cells[0].classList.add("start");
   start = table.rows[0].cells[0];
-  table.rows[size - 1].cells[size - 1].classList.add("end");
-  end = table.rows[size - 1].cells[size - 1];
+  table.rows[n - 1].cells[n - 1].classList.add("end");
+  end = table.rows[n - 1].cells[n - 1];
 
   enableButtons();
 
