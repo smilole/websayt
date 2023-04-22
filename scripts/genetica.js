@@ -1,21 +1,3 @@
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-}
-function getDist(cities){
-    let distCities = [];
- 
-    let dist = 0;
-    for (let i = 0; i < cities.length; i++){
-        distCities.push([])
-        for (let j = 0; j < cities.length; j++){
-            dist = Math.round(Math.sqrt(
-                Math.pow(cities[i][0] - cities[j][0], 2) + Math.pow(cities[i][1] - cities[j][1], 2)
-            ));
-            distCities[i].push(dist);
-        }
-    }
-    return distCities;
-}
 class City{
     constructor(num, closeCities = []) {
         this.num = num;
@@ -43,7 +25,7 @@ class City{
         }
     }
 }
- 
+
 class Tour{
     constructor(tour = [], distance = 0) {
         this.tour = tour;
@@ -85,6 +67,26 @@ class Tour{
         for (let i = a; i < b; i++) this.tour[i] = mutating[i-a];
         this.calculateDist(distCities);
     }
+}
+
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+function getDist(cities){
+    let distCities = [];
+ 
+    let dist = 0;
+    for (let i = 0; i < cities.length; i++){
+        distCities.push([])
+        for (let j = 0; j < cities.length; j++){
+            dist = Math.round(Math.sqrt(
+                Math.pow(cities[i][0] - cities[j][0], 2) + Math.pow(cities[i][1] - cities[j][1], 2)
+            ));
+            distCities[i].push(dist);
+        }
+    }
+    return distCities;
 }
  
 function crossover(parent1, parent2, mutChance, distCities){
@@ -172,7 +174,4 @@ function genAlg(citiesCord){
             drawTour(citiesCord, best);
         }
     }
-    console.log("best way: ");
-    console.log(best);
- 
 }
