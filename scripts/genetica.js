@@ -55,7 +55,6 @@ class Tour{
         this.tour.push(curCity.num);
         let nextCity = cities[this.tour[0]];
         for (let i = 0; i < numCities; i++){
-            //console.log(this.tour);
             nextCity = cities[this.tour[0]];
             if (getRandomInt(99) <= chanceUseCloseCity){
                 for (let j = 0; j < numCloseCities; j++){
@@ -155,7 +154,6 @@ function genAlg(citiesCord){
     population.sort((a, b) => {return a.distance - b.distance});
     let best = population[0];
     drawTour(citiesCord, best);
-    //console.log(best);
  
     let wrGroup = [];
     for (let i = 0; i < maxGen; i++){
@@ -164,9 +162,7 @@ function genAlg(citiesCord){
             wrGroup.push(population[a]);
         }
         wrGroup.sort((a, b) => {return a.distance - b.distance});
-        //console.log(wrGroup);
         wrGroup[wrGroupSize-1] = crossover(wrGroup[0], wrGroup[1], mutChance, distCities);
-        //console.log(wrGroup);
         for (let j = 0; j < wrGroupSize; j++) population[popSize-1-j] = wrGroup[j];
         wrGroup = [];
         population.sort((a, b) => {return a.distance - b.distance});

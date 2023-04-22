@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Кластеризация</title>
+    <title>Муравьи</title>
     <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
   </head>
   <body>
@@ -13,14 +13,7 @@
       <button class="button button1" onclick = "otherButtons()"> Тык </button>
   </div>
     <canvas id="canvas" width="1200" height="800"></canvas>
-    <br />
-    <label for="eps">Расстояние между точками:</label>
-    <input type="range" id="eps" name="eps" min="1" max="500" value="50" />
-    <br />
-    <label for="minPts">Минимум точек в кластере:</label>
-    <input type="range" id="minPts" name="minPts" min="1" max="20" value="3" />
-    <br />
-    <button onclick="colorizeClusters(points, document.getElementById('eps').value, document.getElementById('minPts').value)">Кластеризировать</button>
+    <button onclick="bestofthebest()">Найти путь!!</button>
   </body>
-  <script type="text/javascript" src="scripts/clusterizationScript.js"></script>
+  <script type="text/javascript" src="scripts/antScript.js"></script>
   <script type="text/javascript" src="scripts/menu.js"></script>

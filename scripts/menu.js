@@ -10,6 +10,9 @@ function goToClusterization(){
 function goToGenetics(){
     window.location.href = "genetics.html";
 }
+function goToAnts(){
+    window.location.href = "ants.html"
+}
 function otherButtons(){
     window.location.href = "mainpage.html";
 }

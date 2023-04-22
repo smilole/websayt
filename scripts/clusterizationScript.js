@@ -1,39 +1,40 @@
 var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
-    var points = [];
- 
-    canvas.addEventListener("click", function (event) {
-      var rect = canvas.getBoundingClientRect();
-      var x = event.clientX - rect.left;
-      var y = event.clientY - rect.top;
-      points.push({ x: x, y: y });
-      ctx.beginPath();
-      ctx.arc(x, y, 5, 0, 2 * Math.PI);
-      ctx.fill();
-    });
- 
-  function dbscan(data, eps, minPts) {
+var ctx = canvas.getContext("2d");
+var points = [];
 
-    function findNeighbors(point, data, eps) {
-      var neighbors = [];
-    for(let p of data){
-      if(distance(point,p)<eps){
-        neighbors.push(p);
-      }
+canvas.addEventListener("click", function (event) {
+  var rect = canvas.getBoundingClientRect();
+  var x = event.clientX - rect.left;
+  var y = event.clientY - rect.top;
+  points.push({ x: x, y: y });
+  ctx.beginPath();
+  ctx.arc(x, y, 5, 0, 2 * Math.PI);
+  ctx.fill();
+});
+
+function findNeighbors(point, data, eps) {
+  var neighbors = [];
+  for(let p of data){
+    if(distance(point,p)<eps){
+      neighbors.push(p);
     }
-    return neighbors;
   }
+  return neighbors;
+}
  
-  function distance(p, q) {
-    var dx = p.x - q.x;
-    var dy = p.y - q.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
+function distance(p, q) {
+  var dx = p.x - q.x;
+  var dy = p.y - q.y;
+  return Math.sqrt(dx * dx + dy * dy);
+}
  
-  function isCorePoint(point, neighbors, eps, minPts) {
-    return neighbors.length >= minPts;
-  }
+function isCorePoint(point, neighbors, eps, minPts) {
+  return neighbors.length >= minPts;
+}
  
+ 
+function dbscan(data, eps, minPts) {
+
   var visited = new Set();
   var clusters = new Array();
  
@@ -69,7 +70,7 @@ var canvas = document.getElementById("canvas");
   return clusters;
 }
  
-  function getRandomColor() {
+function getRandomColor() {
   // Генерируем случайные значения для каждого цветового канала
   let r = Math.floor(Math.random() * 256);
   let g = Math.floor(Math.random() * 256);
