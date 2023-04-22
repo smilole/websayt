@@ -146,7 +146,7 @@ function doIteration(ants) {
         ant.distance = distance;
     }
     // испаряем феромоны
-    updatePheromone(pheromone, ants, distances, evaporation);
+    updatePheromone(ants);
 }
     
 // Функция для выполнения алгоритма
